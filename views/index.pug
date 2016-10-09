@@ -1,0 +1,34 @@
+html
+    head
+        title= title
+        style
+            include style.css
+    body
+        if metro
+            div(class= 'top-container')
+                ul(class= 'journey-list')
+                    each item in metro
+                        if (item.JourneyDirection == 1)
+                            li(class= item.status)
+                                p(class= 'journey-time')= item.DisplayTime
+                                p(class= 'journey-destination')= item.Destination
+
+        if weather
+            div(class= 'middle-container')
+                div(class= 'weather-container')
+                    p(class= 'weather-city')= weather.name
+                    p(class= 'weather-degrees')= weather.main.temp + '°C'
+                    each condition in weather.weather
+                        span(class= 'weather-condition')= condition.main + ' (' + condition.description + ')'
+                        if condition.iconUrl
+                            div(class= 'weather-condition-icon')
+                                img(src= condition.iconUrl)
+
+        if metro
+            div(class= 'bottom-container')
+                ul(class= 'journey-list')
+                    each item in metro
+                        if (item.JourneyDirection == 2)
+                            li(class= item.status)
+                                p(class= 'journey-time')= item.DisplayTime
+                                p(class= 'journey-destination')= item.Destination
