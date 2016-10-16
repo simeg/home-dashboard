@@ -22,15 +22,15 @@ weatherConfig = Object.freeze(weatherConfig);
 
 app.get('/', function (req, res) {
     // Ugly solution to make double call work
-    var metroData, weatherData;
+    var metroData, weatherData, errors;
     fetchData(weatherConfig, function(error, data) {
         if (error)
-            return console.error(error);
+            errors.push(error);
 
         weatherData = data;
         fetchData(metroConfig, function(error, data) {
             if (error)
-                return console.error(error);
+                errors.push(error);
 
             metroData = data;
         });
@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
 
     var render = function() {
         if (metroData && weatherData) {
-            res.render('index', { weather: weatherData, metro: metroData });
+            res.render('index', { weather: weatherData, metro: metroData, errors: errors });
             clearInterval(id);
         }
     };
@@ -87,7 +87,7 @@ function fetchData(config, callback) {
 
 function getMetroData(data, config) {
     if (!data || !config)
-        return console.log('One or more parameters are missing');
+        return console.error('One or more parameters are missing');
 
     var stationStr = toPascalCase(config.STATION_NAME);
     var journeys = data['ResponseData']['Metros'];
@@ -97,7 +97,7 @@ function getMetroData(data, config) {
     });
 
     if (!stationExist)
-        return console.log('Station does not exist in data:', stationStr);
+        return console.error('Station does not exist in data:', stationStr);
 
     return journeys.map(function(journey) {
         if (journey['DisplayTime'].toLowerCase() === config.TIME_NOW) {
@@ -121,7 +121,7 @@ function getMetroData(data, config) {
 
 function getWeatherData(data, config) {
     if (!data || !config)
-        return console.log('One or more parameters are missing');
+        return console.error('One or more parameters are missing');
 
     data.main.temp = Math.round(data.main.temp);
 
