@@ -3,6 +3,7 @@ var app = express();
 var http = require('http');
 var config = Object.freeze(require('./config.json'));
 
+app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 // TODO: Clean this up
