@@ -1,0 +1,24 @@
+### DEVELOPMENT
+
+# @reboot sudo /bin/sh /home/pi/node_start.sh &
+
+# Start node server
+# 04 00 * * * /bin/sh /home/pi/node_start.sh &
+
+# Set HDMI output to ON
+# 04 00 * * *  /bin/sh /home/pi/monitor_on.sh
+
+
+### PRODUCTION
+
+# Start node server
+29 8 * * 1-5 /bin/sh /home/pi/node_start.sh &
+
+# Set HDMI output to ON
+30 8 * * 1-5 /bin/sh /home/pi/monitor_on.sh &
+
+# Stop node server
+0 10 * * 1-5 /usr/bin/killall node
+
+# Set HDMI output to OFF
+0 10 * * 1-5 /bin/sh /home/pi/monitor_off.sh &
