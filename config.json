@@ -24,5 +24,8 @@
         "UNITS": "metric",
         "ICON_URL": "http://openweathermap.org/img/w/",
         "ICON_EXTENSION": "png"
+    },
+    "logging": {
+        "PATH": "./logs/info.log"
     }
 }

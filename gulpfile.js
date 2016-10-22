@@ -41,7 +41,7 @@ gulp.task('server', function() {
         'script': paths.server
     }).on('start', function() {
         gulp.src(paths.server)
-            .pipe(livereload())
+            .pipe(livereload());
     });
 });
 
