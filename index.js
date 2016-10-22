@@ -146,6 +146,8 @@ function toPascalCase(str) {
 
 function getDateObject() {
     var dateObj = new Date();
+    var timezoneDiff = 2;
+    dateObj.setHours(dateObj.getHours() + timezoneDiff);
     var timeIndex = dateObj.toISOString().indexOf('T');
     var time = dateObj.toISOString().substr(timeIndex+1, 5);
     var date = dateObj.getDate() + '/' + dateObj.getMonth() + ' ' + dateObj.getYear();
