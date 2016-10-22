@@ -58,7 +58,6 @@ p {
   flex-direction: column;
 
   width: 33%;
-  /*margin: 0 1%;*/
   height: 100%;
   border-radius: 5px;
 }
@@ -70,7 +69,6 @@ p {
 
 .journey-list > li > .journey-time {
   font-size: 3.5em;
-  /*margin-bottom: 10%;*/
 }
 
 .journey-list > li > .journey-destination {
@@ -83,26 +81,25 @@ p {
 
 .middle-container {
   margin: 1% 0;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.middle-container > div {
   background-color: lightblue;
+  position: relative;
+  height: 100%;
+  display: inline-flex;
+  flex-basis: 50%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   border-radius: 5px;
 }
 
-.middle-container > .weather-container {
-  position: relative;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.middle-container > .date-container {
-  position: relative;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+.middle-container > div:nth-of-type(1) {
+  margin-right: 1%;
 }
 
 .weather-container > .weather-city {
@@ -127,6 +124,14 @@ p {
 .weather-container > .weather-condition-icon > img {
   width: auto;
   height: 100%;
+}
+
+.date-container > .date-time {
+  font-size: 6em;
+}
+
+.date-container > .date-date {
+  font-size: 3em;
 }
 
 /*

@@ -8,11 +8,11 @@ var paths = {
     server: './index.js',
     scripts: ['./*.js'],
     templates: ['./views/*.pug'],
-    less: ['./views/*.less']
+    styles: ['./views/*.less']
 };
 
 gulp.task('styles', function() {
-    return gulp.src(paths.less)
+    return gulp.src(paths.styles)
         .pipe(less())
         .pipe(livereload());
 });
@@ -31,7 +31,7 @@ gulp.task('templates', function() {
 
 gulp.task('watch', function() {
     livereload.listen();
-    gulp.watch(paths.less, ['styles']);
+    gulp.watch(paths.styles, ['styles']);
     gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.templates, ['templates']);
 });

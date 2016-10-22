@@ -3,13 +3,13 @@ var app = express();
 var http = require('http');
 var config = Object.freeze(require('./config.json'));
 
-app.set('views', __dirname + '/views');
+app.use(express.static('views'));
 app.set('view engine', 'pug');
 
 // TODO: Clean this up
 var metroConfig = config.metro;
 metroConfig.API_PATH = metroConfig.API_PATH + '?key=' + metroConfig.API_KEY +
-      '&siteid=' + metroConfig.STATION_ID + '&timewindow=' + metroConfig.TIME_WINDOW;
+    '&siteid=' + metroConfig.STATION_ID + '&timewindow=' + metroConfig.TIME_WINDOW;
 metroConfig.PARSE_FUNC = getMetroData;
 metroConfig = Object.freeze(metroConfig);
 
@@ -17,7 +17,7 @@ metroConfig = Object.freeze(metroConfig);
 var weatherConfig = config.weather;
 weatherConfig.PARSE_FUNC = getWeatherData;
 weatherConfig.API_PATH = weatherConfig.API_PATH + '?id=' + weatherConfig.COUNTRY_ID +
-      '&appid=' + weatherConfig.API_KEY + '&units=' + weatherConfig.UNITS;
+    '&appid=' + weatherConfig.API_KEY + '&units=' + weatherConfig.UNITS;
 // Temp
 weatherConfig = Object.freeze(weatherConfig);
 
@@ -39,7 +39,9 @@ app.get('/', function (req, res) {
 
     var render = function() {
         if (metroData && weatherData) {
-            res.render('index', { weather: weatherData, metro: metroData, errors: errors });
+            var date = getDateObject();
+            res.render('index', { weather: weatherData, metro: metroData,
+                errors: errors, date: date });
             clearInterval(id);
         }
     };
@@ -109,7 +111,7 @@ function getMetroData(data, config) {
             if (time <= parseInt(config.TIME_TOO_LATE)) {
                 journey['status'] = config.TIME_TOO_LATE_CSS;
             } else if (time > parseInt(config.TIME_TOO_LATE) &&
-                  time <= parseInt(config.TIME_HURRY)) {
+                time <= parseInt(config.TIME_HURRY)) {
                 journey['status'] = config.TIME_HURRY_CSS;
             } else {
                 journey['status'] = config.TIME_SAFE_CSS;
@@ -130,7 +132,7 @@ function getWeatherData(data, config) {
     for (var i = 0; i < data.weather.length; i++) {
         var weatherObj = data.weather[i];
         weatherObj.iconUrl =
-              weatherConfig.ICON_URL + weatherObj.icon + '.' + weatherConfig.ICON_EXTENSION;
+            weatherConfig.ICON_URL + weatherObj.icon + '.' + weatherConfig.ICON_EXTENSION;
     }
 
     return data;
@@ -142,6 +144,10 @@ function toPascalCase(str) {
     });
 }
 
-function fahrenheitToCelsius(temp) {
-    return ((5.0 / 9.0) * (temp - 32));
+function getDateObject() {
+    var dateObj = new Date();
+    var timeIndex = dateObj.toISOString().indexOf('T');
+    var time = dateObj.toISOString().substr(timeIndex+1, 5);
+    var date = dateObj.getDate() + '/' + dateObj.getMonth() + ' ' + dateObj.getYear();
+    return { time: time, date: date };
 }
