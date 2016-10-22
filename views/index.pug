@@ -5,10 +5,11 @@ html
             include style.less
     body
 
-        if errors
+        if errors && errors.length
             ul(class= 'error-list')
                 each error in errors
-                    li(class= 'error-item')= error
+                    li(class= 'error-item')
+                        p= error.msg
         else
             if metro
                 div(class= 'top-container')
