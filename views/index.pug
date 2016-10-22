@@ -21,7 +21,7 @@ html
 
             if weather
                 div(class= 'middle-container')
-                    div(class= 'weather-container')
+                    div(class= 'weather-container col-6')
                         p(class= 'weather-city')= weather.name
                         p(class= 'weather-degrees')= weather.main.temp + '°C'
                         each condition in weather.weather
@@ -29,6 +29,9 @@ html
                             if condition.iconUrl
                                 div(class= 'weather-condition-icon')
                                     img(src= condition.iconUrl)
+                    div(class= 'date-container middle-child')
+                        p(class= 'date-time')= date.time
+                        p(class= 'date-date')= date.date
 
             if metro
                 div(class= 'bottom-container')
