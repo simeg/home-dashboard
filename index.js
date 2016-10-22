@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 var http = require('http');
+var utils = require('./utils.js');
+var logger = utils.logger();
 var config = Object.freeze(require('./config.json'));
 
 app.use(express.static('views'));
@@ -10,12 +12,12 @@ app.set('view engine', 'pug');
 var metroConfig = config.metro;
 metroConfig.API_PATH = metroConfig.API_PATH + '?key=' + metroConfig.API_KEY +
     '&siteid=' + metroConfig.STATION_ID + '&timewindow=' + metroConfig.TIME_WINDOW;
-metroConfig.PARSE_FUNC = getMetroData;
+metroConfig.PARSER = parseMetroData;
 metroConfig = Object.freeze(metroConfig);
 
 // TODO: Clean this up
 var weatherConfig = config.weather;
-weatherConfig.PARSE_FUNC = getWeatherData;
+weatherConfig.PARSER = parseWeatherData;
 weatherConfig.API_PATH = weatherConfig.API_PATH + '?id=' + weatherConfig.COUNTRY_ID +
     '&appid=' + weatherConfig.API_KEY + '&units=' + weatherConfig.UNITS;
 // Temp
@@ -23,25 +25,33 @@ weatherConfig = Object.freeze(weatherConfig);
 
 app.get('/', function (req, res) {
     // Ugly solution to make double call work
-    var metroData, weatherData, errors;
+    var metroData, weatherData,
+        errors = [];
     fetchData(weatherConfig, function(error, data) {
-        if (error)
+        if (error) {
+            logger.log(error.type, error.msg);
             errors.push(error);
+        }
 
         weatherData = data;
         fetchData(metroConfig, function(error, data) {
-            if (error)
+            if (error) {
+                logger.log(error.type, error.msg);
                 errors.push(error);
+            }
 
             metroData = data;
         });
     });
 
     var render = function() {
-        if (metroData && weatherData) {
+        var errorsExist = (errors && errors.length);
+        if ((metroData && weatherData) || errorsExist) {
             var date = getDateObject();
+            // var uniqueErrors = errorsExist ? utils.filterDeepArray(errors) : null; // Really needed?
+            var uniqueErrors = errors;
             res.render('index', { weather: weatherData, metro: metroData,
-                errors: errors, date: date });
+                errors: uniqueErrors, date: date });
             clearInterval(id);
         }
     };
@@ -54,8 +64,10 @@ app.listen(3000, function () {
 });
 
 function fetchData(config, callback) {
-    if (!config || !callback)
-        return console.error('Missing one or more parameters');
+    if (!config || !callback){
+        callback({ type: 'error', msg: '(fetchData)Missing one or more parameters' });
+        return;
+    }
 
     http.get({
         host: config.API_HOST,
@@ -68,31 +80,35 @@ function fetchData(config, callback) {
         response.on('end', function() {
             response.setEncoding('utf8');
 
-            if (response.statusCode !== 200)
-                return console.log('Invalid Status Code Returned:', response.statusCode);
+            if (response.statusCode !== 200) {
+                callback({ type: 'error',
+                    msg: '(fetchData)Invalid status code returned ' + response.statusCode });
+                return;
+            }
 
             var jsonBody = '';
             try {
                 jsonBody = JSON.parse(body);
             } catch (error) {
-                console.error('Unable to parse response as JSON:', error);
-                callback(error);
+                callback({ type: 'error', msg: error.message });
+                return;
             }
 
-            var parsedData = config.PARSE_FUNC(jsonBody, config);
-            callback(null, parsedData);
+            var parsed = config.PARSER(jsonBody, config);
+            callback(parsed.errors, parsed.data);
         });
     }).on('error', function(error) {
-        console.error('Error with the request:', error.message);
-        callback(error);
+        callback({ type: 'error', msg: error.message });
     });
 }
 
-function getMetroData(data, config) {
-    if (!data || !config)
-        return console.error('One or more parameters are missing');
+function parseMetroData(rawData, config) {
+    if (!rawData || !config)
+        return { data: null,
+            errors: { type: 'error', msg: '(parseMetroData)Missing one or more parameters' }};
 
-    var stationStr = toPascalCase(config.STATION_NAME);
+    var data = rawData;
+    var stationStr = utils.toPascalCase(config.STATION_NAME);
     var journeys = data['ResponseData']['Metros'];
 
     var stationExist = journeys.some(function(journey) {
@@ -100,9 +116,10 @@ function getMetroData(data, config) {
     });
 
     if (!stationExist)
-        return console.error('Station does not exist in data:', stationStr);
+        return { data: null,
+            errors: { type: 'error', msg: 'Station does not exist in data: ' + stationStr }};
 
-    return journeys.map(function(journey) {
+    data = journeys.map(function(journey) {
         if (journey['DisplayTime'].toLowerCase() === config.TIME_NOW) {
             journey['status'] = config.TIME_NOW_CSS;
         } else {
@@ -120,28 +137,26 @@ function getMetroData(data, config) {
 
         return journey;
     });
+
+    return { data: data, errors: null };
 }
 
-function getWeatherData(data, config) {
-    if (!data || !config)
-        return console.error('One or more parameters are missing');
-
-    data.main.temp = Math.round(data.main.temp);
-
-    // Add icon url for all weather elements
-    for (var i = 0; i < data.weather.length; i++) {
-        var weatherObj = data.weather[i];
-        weatherObj.iconUrl =
-            weatherConfig.ICON_URL + weatherObj.icon + '.' + weatherConfig.ICON_EXTENSION;
+function parseWeatherData(rawData, config) {
+    if (!rawData || !config) {
+        return { data: null, errors: { type: 'error',
+            msg: '(parseWeatherData)Missing one or more parameters' }};
     }
 
-    return data;
-}
+    var data = rawData;
+    data.main.temp = Math.round(data.main.temp);
 
-function toPascalCase(str) {
-    return str.replace(/\w\S*/g, function(txt){
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
+    // Set icon url for all weather elements
+    data.weather = rawData.weather.map((function(item) {
+        item.iconUrl = weatherConfig.ICON_URL + item.icon + '.' + weatherConfig.ICON_EXTENSION;
+        return item;
+    }));
+
+    return { data: data, errors: null };
 }
 
 function getDateObject() {
