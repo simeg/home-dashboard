@@ -1,5 +1,5 @@
 {
-  "name": "personal-dashboard",
+  "name": "home-dashboard",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -17,5 +17,12 @@
   "dependencies": {
     "express": "^4.14.0",
     "pug": "^2.0.0-beta6"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.1",
+    "gulp-less": "^3.1.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-nodemon": "^2.2.1"
   }
 }
