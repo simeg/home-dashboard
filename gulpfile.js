@@ -6,6 +6,7 @@ var less = require('gulp-less');
 var livereload = require('gulp-livereload');
 var nodemon = require('gulp-nodemon');
 var eslint = require('gulp-eslint');
+var mocha = require('gulp-mocha');
 
 var paths = {
     server: './index.js',
@@ -55,4 +56,9 @@ gulp.task('lint', function() {
         .pipe(eslint('./.eslintrc'))
         .pipe(eslint.format())
         .pipe(eslint.failOnError());
+});
+
+gulp.task('test', function() {
+    gulp.src('./tests/*.js', {read: false})
+        .pipe(mocha({reporter: 'landing'}));
 });
