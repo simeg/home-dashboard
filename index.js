@@ -50,7 +50,7 @@ app.get('/', function (req, res) {
     var render = function() {
         var errorsExist = (errors && errors.length);
         if ((metroData && weatherData) || errorsExist) {
-            var date = getDateObject();
+            var date = utils.getDateObject();
             var uniqueErrors = errorsExist ? utils.filterDeepArray(errors) : null;
             res.render('index', { weather: weatherData, metro: metroData,
                 errors: uniqueErrors, date: date });
@@ -162,14 +162,4 @@ function parseWeatherData(rawData, config) {
     }));
 
     return { data: data, errors: null };
-}
-
-function getDateObject() {
-    var dateObj = new Date();
-    var timezoneDiff = 2;
-    dateObj.setHours(dateObj.getHours() + timezoneDiff);
-    var timeIndex = dateObj.toISOString().indexOf('T');
-    var time = dateObj.toISOString().substr(timeIndex+1, 5);
-    var date = dateObj.getDate() + '/' + dateObj.getMonth() + ' ' + dateObj.getFullYear();
-    return { time: time, date: date };
 }
