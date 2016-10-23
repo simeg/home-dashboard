@@ -57,14 +57,27 @@ describe('Utilities', function() {
         var logger;
         before(function() {
             logger = utils.logger();
-            this.sinon.stub(console, 'log');
         });
 
-        it('calls console.log', function() {
-            logger.log('log', 'message');
-            expect(console.log.called).to.be.true;
+        it('calls appropriate logging method', function() {
+            this.sinon.stub(logger, 'error');
+            logger.error('message');
+            expect(logger.error.calledOnce).to.be.true;
         });
 
+        it('writes to file when logging', function() {
+            var fs = require('fs');
+            var randomInt = Math.floor(Math.random() * (100 + 1));
+            // Make sure the logged message is somewhat unique
+            var msg = randomInt + 'error message' + randomInt;
+
+            logger.log('error', msg, {}, function () {
+                fs.readFile('./logs/info.test.log', 'utf8', function (err, data) {
+                    expect(data).to.contain(msg);
+                    fs.unlink('./logs/info.test.log'); // Delete test file
+                });
+            });
+        });
     });
 
 });
