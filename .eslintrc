@@ -22,7 +22,6 @@
         "no-fallthrough": 2,
         "no-lonely-if": 2,
         "no-multiple-empty-lines": [2, {"max": 2, "maxEOF": 1}],
-        "no-process-env": 2,
         "no-restricted-globals": [2, "event"],
         "no-trailing-spaces": 2,
         "no-unreachable": 2,
