@@ -15,6 +15,15 @@ module.exports = {
             return JSON.parse(item);
         });
     },
+    getDateObject: function() {
+        var timezoneDiff = 2;
+        var dateObj = new Date();
+        dateObj.setHours(dateObj.getHours() + timezoneDiff);
+        var timeIndex = dateObj.toISOString().indexOf('T');
+        var time = dateObj.toISOString().substr(timeIndex+1, 5);
+        var date = dateObj.getDate() + '/' + dateObj.getMonth() + ' ' + dateObj.getFullYear();
+        return { time: time, date: date };
+    },
     logger: function() {
         var winston = require('winston');
         var isDevMode = process.env.NODE_ENV !== 'development';
