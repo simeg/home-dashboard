@@ -1,0 +1,39 @@
+{
+    // The API used here is called SL Realtidsinformation 3
+    // https://www.trafiklab.se/api/sl-realtidsinformation-3
+    "metro": {
+        "API_KEY": "",                      // Get it here: https://www.trafiklab.se/api/sl-realtidsinformation-3
+        "STATION_NAME": "",                 // Name of your metro station in Stockholm
+        "STATION_ID": "",                   // I used an API called SL Platsuppslag to find the id for my station
+        "TIME_WINDOW": "",                  // 60
+        "API_HOST": "",                     // api.sl.se
+        "API_PATH": "",                     // /api2/realtimedepartures.json
+        "TIME_NOW": "",                     // nu
+
+        // Minutes until departure (The upper limits)
+        "TIME_TOO_LATE": null,              // Below this number you wont make it in time
+        "TIME_HURRY": null,                 // Below this number you have to hurry
+
+        // The values here reference CSS classes
+        "TIME_NOW_CSS": "extreme",          // Wine red w/ white text
+        "TIME_TOO_LATE_CSS": "danger",      // Red w/ black text
+        "TIME_HURRY_CSS": "warning",        // Yellow w/ black text
+        "TIME_SAFE_CSS": "safe"             // Green w/ black text
+    },
+
+    // The API used here is called OpenWeatherMap
+    // https://openweathermap.org/api
+    "weather": {
+        "API_KEY": "",                      // Get it here: http://openweathermap.org/current
+        "COUNTRY_ID": "",                   // 2673730
+        "API_HOST": "",                     // api.openweathermap.org
+        "API_PATH": "",                     // /data/2.5/weather
+        "UNITS": "",                        // metric
+        "ICON_URL": ""                      // http://openweathermap.org/img/w/
+    },
+
+    "logging": {
+        "PATH": "./logs/info.log",          // File path to log file
+        "PATH_TEST": "./logs/info.test.log" // File path to log file used by tests
+    }
+}
