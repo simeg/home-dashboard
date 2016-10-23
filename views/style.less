@@ -14,7 +14,7 @@ body {
   background-color: #2d2d2d;
 }
 
-p {
+p, h1, h2, h3, h4, h5 {
   margin: 0;
 }
 
@@ -132,6 +132,37 @@ p {
 
 .date-container > .date-date {
   font-size: 3em;
+}
+
+/*
+ * Error container
+ */
+
+.error-container {
+  min-width: 80%;
+  min-height: 55%;
+  margin: auto 0;
+  border-radius: 5px;
+  text-align: center;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-container > .error-text-container {
+  max-width: 80%;
+}
+
+.error-container > .error-text-container > h1 {
+  color: black;
+  font-size: 5em;
+  margin-bottom: 15%;
+}
+
+.error-container > .error-text-container > .error-list > .error-item {
+  color: black;
+  font-size: 2em;
 }
 
 /*

@@ -29,14 +29,15 @@ app.get('/', function (req, res) {
         errors = [];
     fetchData(weatherConfig, function(error, data) {
         if (error) {
-            logger.log(error.type, error.msg);
+            logger.log(error.type, error.msg, { calledBy: error.from });
             errors.push(error);
         }
 
+        // We continue even if error happened to collect them all (gotta catch 'em all)
         weatherData = data;
         fetchData(metroConfig, function(error, data) {
             if (error) {
-                logger.log(error.type, error.msg);
+                logger.log(error.type, error.msg, { calledBy: error.from });
                 errors.push(error);
             }
 
@@ -48,8 +49,7 @@ app.get('/', function (req, res) {
         var errorsExist = (errors && errors.length);
         if ((metroData && weatherData) || errorsExist) {
             var date = getDateObject();
-            // var uniqueErrors = errorsExist ? utils.filterDeepArray(errors) : null; // Really needed?
-            var uniqueErrors = errors;
+            var uniqueErrors = errorsExist ? utils.filterDeepArray(errors) : null;
             res.render('index', { weather: weatherData, metro: metroData,
                 errors: uniqueErrors, date: date });
             clearInterval(id);
@@ -65,7 +65,7 @@ app.listen(3000, function () {
 
 function fetchData(config, callback) {
     if (!config || !callback){
-        callback({ type: 'error', msg: '(fetchData)Missing one or more parameters' });
+        callback({ type: 'error', msg: 'Missing one or more parameters', from: 'fetchData' });
         return;
     }
 
@@ -82,7 +82,8 @@ function fetchData(config, callback) {
 
             if (response.statusCode !== 200) {
                 callback({ type: 'error',
-                    msg: '(fetchData)Invalid status code returned ' + response.statusCode });
+                    msg: 'Invalid status code returned (' + response.statusCode + ')',
+                    from: 'fetchData' });
                 return;
             }
 
@@ -90,7 +91,7 @@ function fetchData(config, callback) {
             try {
                 jsonBody = JSON.parse(body);
             } catch (error) {
-                callback({ type: 'error', msg: error.message });
+                callback({ type: 'error', msg: error.message, from: 'fetchData' });
                 return;
             }
 
@@ -105,7 +106,8 @@ function fetchData(config, callback) {
 function parseMetroData(rawData, config) {
     if (!rawData || !config)
         return { data: null,
-            errors: { type: 'error', msg: '(parseMetroData)Missing one or more parameters' }};
+            errors: { type: 'error', msg: 'Missing one or more parameters',
+                from: 'parseMetroData' }};
 
     var data = rawData;
     var stationStr = utils.toPascalCase(config.STATION_NAME);
@@ -117,7 +119,8 @@ function parseMetroData(rawData, config) {
 
     if (!stationExist)
         return { data: null,
-            errors: { type: 'error', msg: 'Station does not exist in data: ' + stationStr }};
+            errors: { type: 'error', msg: 'Station does not exist in data: ' + stationStr,
+                from: 'parseMetroData' }};
 
     data = journeys.map(function(journey) {
         if (journey['DisplayTime'].toLowerCase() === config.TIME_NOW) {
@@ -144,7 +147,7 @@ function parseMetroData(rawData, config) {
 function parseWeatherData(rawData, config) {
     if (!rawData || !config) {
         return { data: null, errors: { type: 'error',
-            msg: '(parseWeatherData)Missing one or more parameters' }};
+            msg: 'Missing one or more parameters', from: 'parseWeatherData' }};
     }
 
     var data = rawData;
