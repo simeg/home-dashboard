@@ -13,5 +13,11 @@ This application fetches real time data from API:s (which I find useful), and th
 
 ![UI](https://cloud.githubusercontent.com/assets/8566054/19629724/0df101bc-997b-11e6-90dd-f017b8bd77e3.png)
 
+## Tech stack
+- Node
+- Express
+- Pug
+- Gulp
+
 ## TODO
 There's a backlog which can be found in the Projects tab.
