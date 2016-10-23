@@ -157,7 +157,7 @@ function parseWeatherData(rawData, config) {
 
     // Set icon url for all weather elements
     data.weather = rawData.weather.map((function(item) {
-        item.iconUrl = weatherConfig.ICON_URL + item.icon + '.' + weatherConfig.ICON_EXTENSION;
+        item.iconUrl = weatherConfig.ICON_URL + item.icon + '.png';
         return item;
     }));
 

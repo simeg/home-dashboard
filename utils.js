@@ -20,7 +20,7 @@ module.exports = {
         var isDevMode = process.env.NODE_ENV !== 'development';
 
         var consoleTransport = isDevMode ? null : new (winston.transports.Console)();
-        var filePath = isDevMode ? config.logging.TEST_PATH : config.logging.PATH;
+        var filePath = isDevMode ? config.logging.PATH_TEST : config.logging.PATH;
         var transports = [new (winston.transports.File)({ filename: filePath })];
         if (consoleTransport)
             transports.push(consoleTransport);
