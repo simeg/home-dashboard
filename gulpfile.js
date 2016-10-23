@@ -1,8 +1,11 @@
+'use strict';
+
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 var livereload = require('gulp-livereload');
 var nodemon = require('gulp-nodemon');
+var eslint = require('gulp-eslint');
 
 var paths = {
     server: './index.js',
@@ -46,3 +49,10 @@ gulp.task('server', function() {
 });
 
 gulp.task('serve', ['server', 'watch']);
+
+gulp.task('lint', function() {
+    return gulp.src(['**/*.js', '!node_modules/**'])
+        .pipe(eslint('./.eslintrc'))
+        .pipe(eslint.format())
+        .pipe(eslint.failOnError());
+});
