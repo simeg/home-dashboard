@@ -112,8 +112,8 @@ function parseMetroData(rawData, config) {
                 from: 'parseMetroData' }};
 
     var data = rawData;
-    var stationStr = utils.toPascalCase(config.STATION_NAME);
     var journeys = data.ResponseData.Metros;
+    var stationStr = utils.toPascalCase(config.STATION_NAME);
 
     var stationExist = journeys.some(function(journey) {
         return journey.StopAreaName === stationStr;
@@ -124,24 +124,7 @@ function parseMetroData(rawData, config) {
             errors: { type: 'error', msg: 'Station does not exist in data: ' + stationStr,
                 from: 'parseMetroData' }};
 
-    data = journeys.map(function(journey) {
-        if (journey.DisplayTime.toLowerCase() === config.TIME_NOW) {
-            journey.status = config.TIME_NOW_CSS;
-        } else {
-            var time = parseInt(journey.DisplayTime, 10);
-
-            if (time <= parseInt(config.TIME_TOO_LATE, 10)) {
-                journey.status = config.TIME_TOO_LATE_CSS;
-            } else if (time > parseInt(config.TIME_TOO_LATE, 10) &&
-                time <= parseInt(config.TIME_HURRY, 10)) {
-                journey.status = config.TIME_HURRY_CSS;
-            } else {
-                journey.status = config.TIME_SAFE_CSS;
-            }
-        }
-
-        return journey;
-    });
+    data = journeys.map(setJourneyStatus);
 
     return { data: data, errors: null };
 }
@@ -162,4 +145,30 @@ function parseWeatherData(rawData, config) {
     }));
 
     return { data: data, errors: null };
+}
+
+function setJourneyStatus(journey) {
+    var now = parseInt(config.metro.TIME_NOW, 10);
+    var tooLate = parseInt(config.metro.TIME_TOO_LATE, 10);
+    var hurry = parseInt(config.metro.TIME_HURRY, 10);
+
+    var cssNow = config.metro.TIME_NOW_CSS;
+    var cssTooLate = config.metro.TIME_TOO_LATE_CSS;
+    var cssHurry = config.metro.TIME_HURRY_CSS;
+    var cssSafe = config.metro.TIME_SAFE_CSS;
+
+    if (journey.DisplayTime.toLowerCase() === now) {
+        journey.status = cssNow;
+    } else {
+        var time = parseInt(journey.DisplayTime, 10);
+
+        if (time <= tooLate) {
+            journey.status = cssTooLate;
+        } else if (time > tooLate && time <= hurry) {
+            journey.status = cssHurry;
+        } else {
+            journey.status = cssSafe;
+        }
+    }
+    return journey;
 }
