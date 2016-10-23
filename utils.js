@@ -15,7 +15,7 @@ module.exports = {
         });
     },
     logger: function() {
-        winston = require('winston');
+        var winston = require('winston');
         return new winston.Logger({
             level: 'info',
             transports: [
