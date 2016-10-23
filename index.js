@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var app = express();
 var http = require('http');
@@ -111,10 +113,10 @@ function parseMetroData(rawData, config) {
 
     var data = rawData;
     var stationStr = utils.toPascalCase(config.STATION_NAME);
-    var journeys = data['ResponseData']['Metros'];
+    var journeys = data.ResponseData.Metros;
 
     var stationExist = journeys.some(function(journey) {
-        return journey['StopAreaName'] === stationStr;
+        return journey.StopAreaName === stationStr;
     });
 
     if (!stationExist)
@@ -123,18 +125,18 @@ function parseMetroData(rawData, config) {
                 from: 'parseMetroData' }};
 
     data = journeys.map(function(journey) {
-        if (journey['DisplayTime'].toLowerCase() === config.TIME_NOW) {
-            journey['status'] = config.TIME_NOW_CSS;
+        if (journey.DisplayTime.toLowerCase() === config.TIME_NOW) {
+            journey.status = config.TIME_NOW_CSS;
         } else {
-            var time = parseInt(journey['DisplayTime']);
+            var time = parseInt(journey.DisplayTime, 10);
 
-            if (time <= parseInt(config.TIME_TOO_LATE)) {
-                journey['status'] = config.TIME_TOO_LATE_CSS;
-            } else if (time > parseInt(config.TIME_TOO_LATE) &&
-                time <= parseInt(config.TIME_HURRY)) {
-                journey['status'] = config.TIME_HURRY_CSS;
+            if (time <= parseInt(config.TIME_TOO_LATE, 10)) {
+                journey.status = config.TIME_TOO_LATE_CSS;
+            } else if (time > parseInt(config.TIME_TOO_LATE, 10) &&
+                time <= parseInt(config.TIME_HURRY, 10)) {
+                journey.status = config.TIME_HURRY_CSS;
             } else {
-                journey['status'] = config.TIME_SAFE_CSS;
+                journey.status = config.TIME_SAFE_CSS;
             }
         }
 

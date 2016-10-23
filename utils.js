@@ -1,3 +1,5 @@
+'use strict';
+
 var config = Object.freeze(require('./config.json'));
 
 module.exports = {
