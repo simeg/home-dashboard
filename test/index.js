@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 var utils = require('./../utils.js');
-var request = require('request');
+require('mocha-sinon');
 
 describe('config.json', function () {
     var config;
@@ -53,9 +53,18 @@ describe('Utilities', function() {
         expect(filteredArray).to.deep.equal(correctResult);
     });
 
-    it('returns logger', function() {
-        var winston = require('winston');
-        var logger = utils.logger();
-        expect(logger).to.not.be.equal(undefined);
+    describe('Logger', function() {
+        var logger;
+        before(function() {
+            logger = utils.logger();
+            this.sinon.stub(console, 'log');
+        });
+
+        it('calls console.log', function() {
+            logger.log('log', 'message');
+            expect(console.log.called).to.be.true;
+        });
+
     });
+
 });
