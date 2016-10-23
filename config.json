@@ -26,6 +26,7 @@
         "ICON_EXTENSION": "png"
     },
     "logging": {
-        "PATH": "./logs/info.log"
+        "PATH": "./logs/info.log",
+        "TEST_PATH": "./logs/info.test.log"
     }
 }
