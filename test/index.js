@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var utils = require('./../utils.js');
 require('mocha-sinon');
 
-describe('config.json', function () {
+describe('Configuration file', function () {
     var config;
     before(function() {
         config = require('./../config.json');
@@ -51,6 +51,23 @@ describe('Utilities', function() {
             { journey: 'Jupiter' }
         ];
         expect(filteredArray).to.deep.equal(correctResult);
+    });
+
+    describe('Date Object', function () {
+        var dateObj;
+        before(function () {
+            dateObj = utils.getDateObject();
+        });
+
+        it('has correct format of time', function () {
+            var time = dateObj.time;
+            expect(time).to.match(/(\d{2}:\d{2})/);
+        });
+
+        it('has correct format of date', function () {
+            var date = dateObj.date;
+            expect(date).to.match(/(\d{1,2}\/\d{1,2}) (20\d{2})/);
+        });
     });
 
     describe('Logger', function() {
