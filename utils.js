@@ -1,6 +1,10 @@
 'use strict';
 
-var config = Object.freeze(require('./config.json'));
+try {
+    var config = Object.freeze(require('./config.json'));
+} catch (e) {
+    console.error('Error:', e);
+}
 
 module.exports = {
     filterDeepArray: function(array) {
