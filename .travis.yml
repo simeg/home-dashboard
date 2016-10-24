@@ -17,5 +17,8 @@ script:
     - codecov
 env:
     - NODE_ENV=ci LOGGER_FILE_PATH=./info.test.ci.log
+cache:
+  directories:
+    - node_modules
 after_success:
   - bash <(curl -s https://codecov.io/bash)
