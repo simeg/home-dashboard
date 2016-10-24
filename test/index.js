@@ -7,6 +7,7 @@ require('mocha-sinon');
 describe('Configuration file', function () {
     var config;
     before(function() {
+        if (process.env.isTravisRunnig) this.skip();
         config = require('./../config.json');
     });
 
