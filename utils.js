@@ -25,6 +25,7 @@ module.exports = {
         return { time: time, date: date };
     },
     getLogger: function() {
+        var fs = require('fs');
         var winston = require('winston');
         var isDevMode = process.env.NODE_ENV === 'dev';
         var isCiMode = process.env.NODE_ENV === 'ci';
@@ -34,7 +35,8 @@ module.exports = {
         if (isDevMode) {
             filePath = config.logging.PATH_TEST;
         } else if (isCiMode) {
-            filePath = process.env.LOGGER_FILE_PATH;
+            filePath = String(process.env.LOGGER_FILE_PATH);
+            fs.closeSync(fs.openSync(filePath, 'w')); // Create file
         } else {
             filePath = config.logging.PATH;
         }
