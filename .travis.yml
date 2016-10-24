@@ -9,10 +9,12 @@ node_js:
     - "5"
 sudo: false
 before_script:
-  - npm install -g gulp
+  - npm install -g codecov gulp istanbul
 script:
     - gulp lint
     - gulp test
+    - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && codecov
+    - codecov
 env:
     - NODE_ENV=ci LOGGER_FILE_PATH=./info.test.ci.log
 after_success:
