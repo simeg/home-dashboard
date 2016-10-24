@@ -1,10 +1,7 @@
 'use strict';
 
-try {
+if (!process.env.isTravisRunnig)
     var config = Object.freeze(require('./config.json'));
-} catch (e) {
-    console.error('Error:', e);
-}
 
 module.exports = {
     filterDeepArray: function(array) {
