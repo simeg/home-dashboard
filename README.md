@@ -1,4 +1,9 @@
-# Home Dashboard
+Home Dashboard
+==============
+
+[![Build Status](https://travis-ci.org/simeg/home-dashboard.svg?branch=master)](https://travis-ci.org/simeg/home-dashboard) 
+[![Dependency Status](https://gemnasium.com/badges/github.com/simeg/home-dashboard.svg)](https://gemnasium.com/badges/github.com/simeg/home-dashboard.svg)
+
 **NOTE: This project is at the moment strictly coupled to my (Simon Egersand, the author) requirements.**
 **Therefore should this project _not_ be seen as a generic solution to a bigger problem. It will become a more generic solution later.** 
 
