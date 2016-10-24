@@ -15,5 +15,6 @@ script:
     - gulp test
 env:
     - NODE_ENV=ci
+    - LOGGER_FILE_PATH=./logs/info.test.log
 after_success:
   - bash <(curl -s https://codecov.io/bash)

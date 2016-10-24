@@ -26,10 +26,18 @@ module.exports = {
     },
     getLogger: function() {
         var winston = require('winston');
-        var isDevMode = process.env.NODE_ENV !== 'dev';
+        var isDevMode = process.env.NODE_ENV === 'dev';
+        var isCiMode = process.env.NODE_ENV === 'ci';
 
-        var consoleTransport = isDevMode ? null : new (winston.transports.Console)();
-        var filePath = isDevMode ? config.logging.PATH_TEST : config.logging.PATH;
+        var consoleTransport = isDevMode ? new (winston.transports.Console)() : null;
+        var filePath;
+        if (isDevMode) {
+            filePath = config.logging.PATH_TEST;
+        } else if (isCiMode) {
+            filePath = process.env.LOGGER_FILE_PATH;
+        } else {
+            filePath = config.logging.PATH;
+        }
         var transports = [new (winston.transports.File)({ filename: filePath })];
         if (consoleTransport)
             transports.push(consoleTransport);
