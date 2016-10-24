@@ -2,7 +2,6 @@ language: node_js
 os:
     - linux
     - windows
-    - osx
 node_js:
     - "stable"
     - "6"
@@ -22,3 +21,4 @@ cache:
     - node_modules
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  
