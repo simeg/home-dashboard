@@ -74,7 +74,7 @@ describe('Utilities', function() {
     describe('Logger', function() {
         var logger;
         before(function() {
-            logger = utils.logger();
+            logger = utils.getLogger();
         });
 
         it('calls appropriate logging method', function() {

@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 var http = require('http');
 var utils = require('./utils.js');
-var logger = utils.logger();
+var logger = utils.getLogger();
 var config = Object.freeze(require('./config.json'));
 
 app.use(express.static('views'));

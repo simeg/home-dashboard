@@ -27,7 +27,7 @@ module.exports = {
         var date = dateObj.getDate() + '/' + dateObj.getMonth() + ' ' + dateObj.getFullYear();
         return { time: time, date: date };
     },
-    logger: function() {
+    getLogger: function() {
         var winston = require('winston');
         var isDevMode = process.env.NODE_ENV !== 'development';
 
