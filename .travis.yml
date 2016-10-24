@@ -13,5 +13,7 @@ before_script:
 script:
     - gulp lint
     - gulp test
+env:
+    - NODE_ENV=ci
 after_success:
   - bash <(curl -s https://codecov.io/bash)

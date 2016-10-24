@@ -1,6 +1,6 @@
 'use strict';
 
-if (!process.env.isTravisRunnig)
+if (process.env.NODE_ENV !== 'ci')
     var config = Object.freeze(require('./config.json'));
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
     },
     getLogger: function() {
         var winston = require('winston');
-        var isDevMode = process.env.NODE_ENV !== 'development';
+        var isDevMode = process.env.NODE_ENV !== 'dev';
 
         var consoleTransport = isDevMode ? null : new (winston.transports.Console)();
         var filePath = isDevMode ? config.logging.PATH_TEST : config.logging.PATH;
