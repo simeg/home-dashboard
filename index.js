@@ -7,7 +7,7 @@ var utils = require('./utils.js');
 var logger = utils.getLogger();
 var config = Object.freeze(require('./config.json'));
 
-app.use(express.static('views'));
+app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 // TODO: Clean this up
