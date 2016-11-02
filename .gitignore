@@ -1,9 +1,7 @@
 # Configuration file
 config.json
 
-# Logs
-logs
-*.log
+# npm debug
 npm-debug.log*
 
 # Runtime data
