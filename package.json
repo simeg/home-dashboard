@@ -17,18 +17,18 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.8.1",
+    "chai": "^4.1.0",
+    "eslint": "^4.3.0",
     "gulp": "^3.9.1",
-    "gulp-eslint": "^3.0.1",
+    "gulp-eslint": "^4.0.0",
     "gulp-jshint": "^2.0.1",
     "gulp-less": "^3.1.0",
     "gulp-livereload": "^3.8.1",
-    "gulp-mocha": "^3.0.1",
+    "gulp-mocha": "^4.3.1",
     "gulp-nodemon": "^2.2.1",
     "jshint": "^2.9.4",
     "mocha": "^3.1.2",
-    "mocha-sinon": "^1.1.6",
-    "sinon": "^1.17.6"
+    "mocha-sinon": "^2.0.0",
+    "sinon": "^2.4.1"
   }
 }
