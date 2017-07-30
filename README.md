@@ -1,4 +1,6 @@
 # Home Dashboard
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/simeg/home-dashboard.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/simeg/home-dashboard.svg?branch=master)](https://travis-ci.org/simeg/home-dashboard)
 [![Code Climate](https://codeclimate.com/github/simeg/home-dashboard/badges/gpa.svg)](https://codeclimate.com/github/simeg/home-dashboard) 
 [![Test Coverage](https://codecov.io/gh/simeg/home-dashboard/branch/master/graph/badge.svg)](https://codecov.io/gh/simeg/home-dashboard)
