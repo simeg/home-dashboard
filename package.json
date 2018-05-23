@@ -24,7 +24,7 @@
     "gulp-jshint": "^2.0.1",
     "gulp-less": "^3.1.0",
     "gulp-livereload": "^3.8.1",
-    "gulp-mocha": "^4.3.1",
+    "gulp-mocha": "^6.0.0",
     "gulp-nodemon": "^2.2.1",
     "jshint": "^2.9.4",
     "mocha": "^3.1.2",
